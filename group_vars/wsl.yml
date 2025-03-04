@@ -3,6 +3,7 @@ windows_user: jaime
 user_dir_symlinks:
   - { src: .ssh, dest: .ssh }
   - { src: .aws, dest: .aws }
+  - { src: .kube, dest: .kube }
 programs_symlinks:
   - { src: Amazon/AWSCLIV2/aws.exe, dest: aws }
   - { src: Git/bin/git.exe, dest: git }
