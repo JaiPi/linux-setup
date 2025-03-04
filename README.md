@@ -15,7 +15,9 @@ This Ansible playbook **automates the setup of a Linux environment** by installi
 
 ## 🛠️ **Prerequisites**
 Before running the playbook, ensure you have:
-- **Ansible installed** (`sudo apt install ansible` or `sudo dnf install ansible`)
+- **Ansible installed** 
+  - Debian: `sudo apt update && sudo apt install -y ansible python3-apt` 
+  - Fedora: `sudo dnf install -y ansible python3-dnf`
 
 ---
 
