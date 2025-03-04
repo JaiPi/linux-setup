@@ -1,3 +1,4 @@
+---
 - name: Ensure Windows directories exist before linking
   stat:
     path: /mnt/c/Users/{{ windows_user }}
