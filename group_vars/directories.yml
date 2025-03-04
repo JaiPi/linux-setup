@@ -1,0 +1,5 @@
+---
+directories_to_create:
+  - .local/bin
+  - repos/jaipi
+  - repos/celfocus

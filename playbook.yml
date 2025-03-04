@@ -1,0 +1,38 @@
+                            
+# @Docs:     https://docs.aws.amazon.com/systems-manager/latest/userguide/agent-install-rhel-7.html                                                  
+# @Obs:      The command to run this playbook is:                             
+# @Obs:      (run)     ansible-playbook playbook.yml --ask-become-pass      
+# @Obs:      (dry-run) ansible-playbook playbook.yml --ask-become-pass --check
+# @Obs:      (verbose) ansible-playbook playbook.yml --ask-become-pass -vvvv
+
+---
+- name: Automated Linux Setup
+  hosts: localhost
+  become: true
+  gather_facts: true
+
+  vars_prompt:
+    - name: is_wsl
+      prompt: "Is this a WSL setup? (yes/no)"
+      private: false
+      default: "yes"
+
+    - name: install_zsh
+      prompt: "Do you want to install Zsh? (yes/no)"
+      private: false
+      default: "no"
+
+  vars_files:
+    - group_vars/directories.yml
+    - group_vars/packages.yml
+    - group_vars/stow.yml
+    - group_vars/wsl.yml
+
+  roles:
+    - ping
+    - packages
+    - directories
+    - role: wsl
+      when: is_wsl == "yes"
+    - stow
+    - zch

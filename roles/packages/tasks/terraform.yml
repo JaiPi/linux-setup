@@ -1,0 +1,59 @@
+---
+- name: Check if terraform-docs is already installed
+  stat:
+    path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/terraform-docs
+  register: terraform_docs_bin
+
+- name: Install Terraform Docs
+  block:
+    - name: Download terraform-docs binary
+      get_url:
+        url: https://terraform-docs.io/dl/v{{ terraform_docs_version }}/terraform-docs-v{{ terraform_docs_version }}-{{ ansible_facts[system] }}-amd64.tar.gz
+        dest: /tmp/terraform-docs.tar.gz
+        mode: 0644
+
+    - name: Extract terraform-docs binary
+      unarchive:
+        src: /tmp/terraform-docs.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Move terraform-docs binary to ~/.local/bin/
+      command:
+        cmd: mv /tmp/terraform-docs /home/{{ ansible_env.SUDO_USER }}/.local/bin/terraform-docs
+
+    - name: Ensure terraform-docs is executable
+      file:
+        path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/terraform-docs
+        mode: 0755
+        owner: "{{ ansible_env.SUDO_USER }}"
+        group: "{{ ansible_env.SUDO_USER }}"
+
+    - name: Remove temporary files after installation
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /tmp/terraform-docs.tar.gz
+  when: not terraform_docs_bin.stat.exists
+
+- name: Check if tfswitch is already installed
+  stat:
+    path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/tfswitch
+  register: tfswitch_bin
+
+- name: Install tfswitch
+  block:
+
+    - name: Download and install tfswitch
+      shell: curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/master/install.sh | bash -s -- -b /home/{{ ansible_env.SUDO_USER }}/.local/bin
+      args:
+        creates: /home/{{ ansible_env.SUDO_USER }}/.local/bin/tfswitch
+
+    - name: Ensure tfswitch is executable
+      file:
+        path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/tfswitch
+        mode: 0755
+        owner: "{{ ansible_env.SUDO_USER }}"
+        group: "{{ ansible_env.SUDO_USER }}"
+  when: not tfswitch_bin.stat.exists

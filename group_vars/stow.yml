@@ -1,0 +1,11 @@
+---
+repo: git@github.com:JaiPi/stow.git
+dest_name: stow
+version: main
+key_file_name: JaiPi
+# stow_dirs:
+#   - aws
+#   - bash
+#   - git
+#   - ssh
+#   - tfswitch

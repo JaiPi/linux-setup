@@ -1,0 +1,25 @@
+- name: Ensure Windows directories exist before linking
+  stat:
+    path: /mnt/c/Users/{{ windows_user }}
+  register: windows_home
+
+- name: Warn if Windows home directory is not found
+  debug:
+    msg: "⚠️ Windows home directory not found: /mnt/c/Users/{{ windows_user }}"
+  when: not windows_home.stat.exists
+
+- name: Create symlinks for Windows directories
+  file:
+    src: /mnt/c/Users/{{ windows_user }}/{{ item.src }}
+    dest: /home/{{ ansible_env.SUDO_USER }}/{{ item.dest }}
+    state: link
+  with_items: "{{ user_dir_symlinks }}"
+  when: windows_home.stat.exists and user_dir_symlinks is defined
+  
+- name: Create symlinks for Windows programs
+  file:
+    src: /mnt/c/Program Files/{{ item.src }}
+    dest: /home/{{ ansible_env.SUDO_USER }}/.local/bin/{{ item.dest }}
+    state: link
+  with_items: "{{ programs_symlinks }}"
+  when: windows_home.stat.exists and programs_symlinks is defined

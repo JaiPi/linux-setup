@@ -1,0 +1,4 @@
+---
+- name: Update APT package index (Debian-based)
+  apt:
+    update_cache: yes

@@ -1,0 +1,35 @@
+---
+- name: Ensure SSH key exists for cloning private repo
+  stat:
+    path: /home/{{ ansible_env.SUDO_USER }}/.ssh/{{ key_file_name }}
+  register: ssh_key
+  changed_when: false
+
+- name: Warn if no SSH key is found
+  debug:
+    msg: "⚠️  No SSH key found: /home/{{ ansible_env.SUDO_USER }}/.ssh/{{ key_file_name }}"
+  when: not ssh_key.stat.exists
+
+- name: Check if {{ dest_name }} directory already exists
+  stat:
+    path: /home/{{ ansible_env.SUDO_USER }}/{{ dest_name }}
+  register: stow_dir
+  changed_when: false
+
+- name: Stow setup tasks
+  block:
+
+    - name: Clone {{ repo }}?{{ version }}
+      git:
+        repo: "{{ repo }}"
+        dest: /home/{{ ansible_env.SUDO_USER }}/{{ dest_name }}
+        version: "{{ version }}"
+        key_file: /home/{{ ansible_env.SUDO_USER }}/.ssh/{{ key_file_name }}
+        accept_hostkey: yes
+
+    - name: Run Stow
+      command:
+        cmd: stow -d /home/{{ ansible_env.SUDO_USER }}/{{ dest_name }} -t /home/{{ ansible_env.SUDO_USER }} {{ item }}
+      with_items: "{{ stow_dirs }}"
+
+  when: ssh_key.stat.exists and not stow_dir.stat.exists and stow_dirs is defined

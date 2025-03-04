@@ -1,0 +1,8 @@
+---
+- name: Ensure required directories exist
+  file:
+    path: /home/{{ ansible_env.SUDO_USER }}/{{ item }}
+    state: directory
+    mode: 0755
+  with_items: "{{ directories_to_create }}"
+  when: directories_to_create is defined
