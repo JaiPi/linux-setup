@@ -18,15 +18,16 @@
   vars_files:
     - group_vars/directories.yml
     - group_vars/packages.yml
-    - group_vars/wsl.yml
     - group_vars/stow.yml
+    - group_vars/wsl.yml
+    - group_vars/zsh.yml
 
   roles:
     - ping
     - directories
     - packages
     - role: wsl
-      when: is_wsl == "yes"
+      when: is_wsl in ["yes", "y"]
     - stow
-    - role: zch
-      when: install_zsh == "yes"
+    - role: zsh
+      when: install_zsh in ["yes", "y"]

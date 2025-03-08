@@ -1,0 +1,27 @@
+---
+- name: Install Zsh
+  package:
+    name: zsh
+    state: present
+
+- name: Ensure ~/.zsh directory exists
+  file:
+    path: /home/{{ ansible_env.SUDO_USER }}/.zsh
+    state: directory
+    mode: 0755
+    owner: "{{ ansible_env.SUDO_USER}}"
+    group: "{{ ansible_env.SUDO_USER}}"
+
+- name: Clone Zsh plugins
+  git:
+    repo: "{{ item.repo }}"
+    dest: /home/{{ ansible_env.SUDO_USER }}/.zsh/{{ item.dest }}
+    depth: 1
+  loop: "{{ zsh_plugins }}"
+  check_mode: no
+  when: zsh_plugins is defined
+
+- name: Change default shell to Zsh
+  user:
+    name: "{{ ansible_env.SUDO_USER }}"
+    shell: "/bin/zsh"

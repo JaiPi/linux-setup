@@ -1,7 +1,12 @@
 ---
 system_packages:
-  - stow
+  - fzf
   - git
+  - man
+  - neovim
+  - stow
+  - tmux
+  - wget
 
 install_terraform_tools: true
 terraform_docs_version: "0.19.0"
