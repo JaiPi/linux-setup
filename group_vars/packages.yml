@@ -1,11 +1,13 @@
 ---
 system_packages:
+  - fontconfig
   - fzf
   - git
   - man
   - neovim
   - stow
   - tmux
+  - unzip
   - wget
 
 install_terraform_tools: true

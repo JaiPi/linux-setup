@@ -21,7 +21,26 @@
   check_mode: no
   when: zsh_plugins is defined
 
-- name: Change default shell to Zsh
-  user:
-    name: "{{ ansible_env.SUDO_USER }}"
-    shell: "/bin/zsh"
+# - name: Change default shell to Zsh
+#   user:
+#     name: "{{ ansible_env.SUDO_USER }}"
+#     shell: /bin/zsh
+
+- name: Download and Install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: "/usr/local/bin/starship"
+
+- name: Download FiraCode Nerd Font
+  get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
+    dest: /tmp/FiraCode.zip
+
+- name: Extract FiraCode Nerd Font
+  unarchive:
+    src: /tmp/FiraCode.zip
+    dest: /home/{{ ansible_env.SUDO_USER }}/.local/share/fonts
+    remote_src: yes
+
+- name: Refresh font cache
+  command:  fc-cache -fv /home/{{ ansible_env.SUDO_USER }}/.local/share/fonts

@@ -1,5 +1,6 @@
 ---
 directories_to_create:
   - .local/bin
+  - .local/share/fonts
   - repos/jaipi
   - repos/celfocus
