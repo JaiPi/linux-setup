@@ -6,9 +6,10 @@
 
 - name: Install Terraform Docs
   block:
+  
     - name: Download terraform-docs binary
       get_url:
-        url: https://terraform-docs.io/dl/v{{ terraform_docs_version }}/terraform-docs-v{{ terraform_docs_version }}-{{ ansible_facts[system] }}-amd64.tar.gz
+        url: https://terraform-docs.io/dl/v{{ terraform_docs_version }}/terraform-docs-v{{ terraform_docs_version }}-{{ ansible_facts['system'] }}-amd64.tar.gz
         dest: /tmp/terraform-docs.tar.gz
         mode: 0644
 
@@ -35,6 +36,7 @@
         state: absent
       with_items:
         - /tmp/terraform-docs.tar.gz
+
   when: not terraform_docs_bin.stat.exists
 
 - name: Check if tfswitch is already installed
@@ -56,4 +58,5 @@
         mode: 0755
         owner: "{{ ansible_env.SUDO_USER }}"
         group: "{{ ansible_env.SUDO_USER }}"
+
   when: not tfswitch_bin.stat.exists

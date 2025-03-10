@@ -1,5 +1,6 @@
 ---
 system_packages:
+  - curl
   - fontconfig
   - fzf
   - git
@@ -10,5 +11,5 @@ system_packages:
   - unzip
   - wget
 
-install_terraform_tools: true
+install_terraform_tools: false
 terraform_docs_version: "0.19.0"

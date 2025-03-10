@@ -7,5 +7,6 @@ stow_dirs:
   - aws
   - bash
   - git
-  - ssh
+  # - ssh
   - tfswitch
+  - zsh
