@@ -10,6 +10,7 @@ system_packages:
   - tmux
   - unzip
   - wget
+  - kubectx
 
 install_terraform_tools: true
 terraform_docs_version: "0.19.0"
