@@ -1,7 +1,7 @@
 ---
 - name: Check if terraform-docs is already installed
   stat:
-    path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/terraform-docs
+    path: "{{ ansible_env.HOME }}/.local/bin/terraform-docs"
   register: terraform_docs_bin
 
 - name: Install Terraform Docs
@@ -21,14 +21,12 @@
 
     - name: Move terraform-docs binary to ~/.local/bin/
       command:
-        cmd: mv /tmp/terraform-docs /home/{{ ansible_env.SUDO_USER }}/.local/bin/terraform-docs
+        cmd: mv /tmp/terraform-docs {{ ansible_env.HOME }}/.local/bin/terraform-docs
 
     - name: Ensure terraform-docs is executable
       file:
-        path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/terraform-docs
+        path: "{{ ansible_env.HOME }}/.local/bin/terraform-docs"
         mode: 0755
-        owner: "{{ ansible_env.SUDO_USER }}"
-        group: "{{ ansible_env.SUDO_USER }}"
 
     - name: Remove temporary files after installation
       file:
@@ -41,22 +39,11 @@
 
 - name: Check if tfswitch is already installed
   stat:
-    path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/tfswitch
+    path: "{{ ansible_env.HOME }}/.local/bin/tfswitch"
   register: tfswitch_bin
 
-- name: Install tfswitch
-  block:
-
-    - name: Download and install tfswitch
-      shell: curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/master/install.sh | bash -s -- -b /home/{{ ansible_env.SUDO_USER }}/.local/bin
-      args:
-        creates: /home/{{ ansible_env.SUDO_USER }}/.local/bin/tfswitch
-
-    - name: Ensure tfswitch is executable
-      file:
-        path: /home/{{ ansible_env.SUDO_USER }}/.local/bin/tfswitch
-        mode: 0755
-        owner: "{{ ansible_env.SUDO_USER }}"
-        group: "{{ ansible_env.SUDO_USER }}"
-
+- name: Download and install tfswitch
+  shell: curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/master/install.sh | bash -s -- -b {{ ansible_env.HOME }}/.local/bin
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/bin/tfswitch"
   when: not tfswitch_bin.stat.exists

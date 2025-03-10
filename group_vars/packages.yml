@@ -11,5 +11,5 @@ system_packages:
   - unzip
   - wget
 
-install_terraform_tools: false
+install_terraform_tools: true
 terraform_docs_version: "0.19.0"

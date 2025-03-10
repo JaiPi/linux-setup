@@ -6,30 +6,18 @@
 
 - name: Ensure ~/.zsh directory exists
   file:
-    path: /home/{{ ansible_env.SUDO_USER }}/.zsh
+    path: "{{ ansible_env.HOME }}/.zsh"
     state: directory
     mode: 0755
-    owner: "{{ ansible_env.SUDO_USER}}"
-    group: "{{ ansible_env.SUDO_USER}}"
 
 - name: Clone Zsh plugins
   git:
     repo: "{{ item.repo }}"
-    dest: /home/{{ ansible_env.SUDO_USER }}/.zsh/{{ item.dest }}
+    dest: "{{ ansible_env.HOME }}/.zsh/{{ item.dest }}"
     depth: 1
   loop: "{{ zsh_plugins }}"
-  check_mode: no
   when: zsh_plugins is defined
-
-# - name: Change default shell to Zsh
-#   user:
-#     name: "{{ ansible_env.SUDO_USER }}"
-#     shell: /bin/zsh
-
-- name: Download and Install Starship
-  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
-  args:
-    creates: /usr/local/bin/starship
+  check_mode: no
 
 - name: Download FiraCode Nerd Font
   get_url:
@@ -39,8 +27,26 @@
 - name: Extract FiraCode Nerd Font
   unarchive:
     src: /tmp/FiraCode.zip
-    dest: /home/{{ ansible_env.SUDO_USER }}/.local/share/fonts
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts"
     remote_src: yes
 
+- name: Remove temporary files after extraction
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /tmp/FiraCode.zip
+
 - name: Refresh font cache
-  command:  fc-cache -fv /home/{{ ansible_env.SUDO_USER }}/.local/share/fonts
+  command:  fc-cache -fv {{ ansible_env.HOME }}/.local/share/fonts
+
+- name: Download and Install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+
+- name: Change default shell to Zsh
+  user:
+    name: "{{ ansible_env.USER }}"
+    shell: /bin/zsh
+  become: true

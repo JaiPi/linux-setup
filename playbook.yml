@@ -2,7 +2,6 @@
 ---
 - name: Automated Linux Setup
   hosts: localhost
-  become: true
 
   vars_prompt:
     - name: is_wsl
