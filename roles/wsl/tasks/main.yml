@@ -14,8 +14,8 @@
     src: /mnt/c/Users/{{ windows_user }}/{{ item.src }}
     dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
     state: link
-  with_items: "{{ user_dir_symlinks }}"
-  when: windows_home.stat.exists and user_dir_symlinks is defined
+  with_items: "{{ user_symlinks }}"
+  when: windows_home.stat.exists and user_symlinks is defined
 
 - name: Create symlinks for Windows programs
   file:

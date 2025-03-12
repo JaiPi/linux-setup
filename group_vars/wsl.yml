@@ -1,9 +1,10 @@
 ---
 windows_user: jaime
-user_dir_symlinks:
+user_symlinks:
   - { src: .ssh, dest: .ssh }
   - { src: .aws, dest: .aws }
   - { src: .kube, dest: .kube }
+  - { src: AppData/Local/Microsoft/WinGet/Packages/Helm.Helm_Microsoft.Winget.Source_8wekyb3d8bbwe/windows-amd64/helm.exe, dest: .local/bin/helm }
 programs_symlinks:
   - { src: Amazon/AWSCLIV2/aws.exe, dest: aws }
   - { src: Git/bin/git.exe, dest: git }

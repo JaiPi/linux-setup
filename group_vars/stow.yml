@@ -6,7 +6,7 @@ key_file_name: JaiPi
 stow_dirs:
   - aws
   - bash
-  - git
+  # - git
   # - ssh
   - tfswitch
   - zsh
