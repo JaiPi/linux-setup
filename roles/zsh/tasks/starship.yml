@@ -1,0 +1,24 @@
+---
+- name: Download FiraCode Nerd Font
+  get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
+    dest: /tmp/FiraCode.zip
+
+- name: Extract FiraCode Nerd Font
+  unarchive:
+    src: /tmp/FiraCode.zip
+    dest: "{{ ansible_env.HOME }}/.local/share/fonts"
+    remote_src: yes
+
+- name: Remove temporary files after extraction
+  file:
+    path: /tmp/FiraCode.zip
+    state: absent
+
+- name: Refresh font cache
+  command:  fc-cache -fv {{ ansible_env.HOME }}/.local/share/fonts
+
+- name: Download and Install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship

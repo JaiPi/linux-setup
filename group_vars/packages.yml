@@ -8,6 +8,7 @@ system_packages:
   - neovim
   - stow
   - tmux
+  - tree
   - unzip
   - wget
   - kubectx
