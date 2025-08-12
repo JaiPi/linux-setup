@@ -4,4 +4,4 @@ directories_to_create:
   - .local/share
   - .local/share/fonts
   - repos/jaipi
-  - repos/celfocus
+  - repos/nos
