@@ -1,15 +1,20 @@
 ---
 - name: Include Debian-specific tasks
-  include_tasks: debian.yml
+  ansible.builtin.include_tasks: debian.yml
   when: ansible_facts['os_family'] == "Debian"
 
+- name: Include RedHat-specific tasks
+  ansible.builtin.include_tasks: redhat.yml
+  when: ansible_facts['os_family'] == "RedHat"
+
 - name: Install system packages (Debian/RedHat)
-  package:
+  ansible.builtin.package:
     name: "{{ system_packages }}"
     state: present
   when: ansible_facts['os_family'] in ["Debian", "RedHat"] and system_packages is defined
   become: true
 
 - name: Install Terraform tools
-  include_tasks: terraform.yml
+  ansible.builtin.include_tasks: terraform.yml
   when: install_terraform_tools
+  tags: [terraform]

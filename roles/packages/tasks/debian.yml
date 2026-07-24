@@ -1,5 +1,5 @@
 ---
 - name: Update APT package index (Debian-based)
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
   become: true

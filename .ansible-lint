@@ -1,0 +1,11 @@
+---
+profile: basic
+
+exclude_paths:
+  - .github/
+  - .yamllint
+
+skip_list:
+  # No ansible.builtin module cleanly replaces `mv` here; revisit if
+  # terraform.yml is refactored to unarchive directly into ~/.local/bin/.
+  - command-instead-of-module

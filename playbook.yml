@@ -1,4 +1,3 @@
-                                     
 ---
 - name: Automated Linux Setup
   hosts: localhost
@@ -14,6 +13,21 @@
       private: false
       default: "no"
 
+    - name: windows_user
+      prompt: "Windows username (used for WSL symlinks under /mnt/c/Users/<name>)"
+      private: false
+      default: "jaime"
+
+    - name: repo
+      prompt: "Git SSH URL of your dotfiles (stow) repo"
+      private: false
+      default: "git@github.com:JaiPi/stow.git"
+
+    - name: key_file_name
+      prompt: "SSH private key filename in ~/.ssh used to clone the dotfiles repo"
+      private: false
+      default: "JaiPi"
+
   vars_files:
     - group_vars/directories.yml
     - group_vars/packages.yml
@@ -22,11 +36,22 @@
     - group_vars/zsh.yml
 
   roles:
-    - ping
-    - directories
-    - packages
+    - role: ping
+      tags: [ping]
+
+    - role: directories
+      tags: [directories]
+
+    - role: packages
+      tags: [packages]
+
     - role: wsl
       when: is_wsl in ["yes", "y"]
-    - stow
+      tags: [wsl]
+
+    - role: stow
+      tags: [stow]
+
     - role: zsh
       when: install_zsh in ["yes", "y"]
+      tags: [zsh]

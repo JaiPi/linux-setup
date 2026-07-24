@@ -1,49 +1,52 @@
 ---
 - name: Check if terraform-docs is already installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.local/bin/terraform-docs"
-  register: terraform_docs_bin
+  register: packages_terraform_docs_bin
 
 - name: Install Terraform Docs
+  when: not packages_terraform_docs_bin.stat.exists
   block:
-  
+
     - name: Download terraform-docs binary
-      get_url:
+      ansible.builtin.get_url:
         url: https://terraform-docs.io/dl/v{{ terraform_docs_version }}/terraform-docs-v{{ terraform_docs_version }}-{{ ansible_facts['system'] }}-amd64.tar.gz
         dest: /tmp/terraform-docs.tar.gz
         mode: 0644
 
     - name: Extract terraform-docs binary
-      unarchive:
+      ansible.builtin.unarchive:
         src: /tmp/terraform-docs.tar.gz
         dest: /tmp/
         remote_src: yes
 
     - name: Move terraform-docs binary to ~/.local/bin/
-      command:
+      ansible.builtin.command:
         cmd: mv /tmp/terraform-docs {{ ansible_env.HOME }}/.local/bin/terraform-docs
+      changed_when: true
 
     - name: Ensure terraform-docs is executable
-      file:
+      ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/.local/bin/terraform-docs"
         mode: 0755
 
     - name: Remove temporary files after installation
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: absent
       with_items:
         - /tmp/terraform-docs.tar.gz
 
-  when: not terraform_docs_bin.stat.exists
-
 - name: Check if tfswitch is already installed
-  stat:
+  ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.local/bin/tfswitch"
-  register: tfswitch_bin
+  register: packages_tfswitch_bin
 
 - name: Download and install tfswitch
-  shell: curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/master/install.sh | bash -s -- -b {{ ansible_env.HOME }}/.local/bin
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/master/install.sh | bash -s -- -b {{ ansible_env.HOME }}/.local/bin
   args:
+    executable: /bin/bash
     creates: "{{ ansible_env.HOME }}/.local/bin/tfswitch"
-  when: not tfswitch_bin.stat.exists
+  when: not packages_tfswitch_bin.stat.exists

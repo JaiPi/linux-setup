@@ -1,0 +1,5 @@
+---
+- name: Update DNF package index (RedHat-based)
+  ansible.builtin.dnf:
+    update_cache: yes
+  become: true

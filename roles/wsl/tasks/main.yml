@@ -1,26 +1,26 @@
 ---
 - name: Ensure Windows directories exist before linking
-  stat:
+  ansible.builtin.stat:
     path: /mnt/c/Users/{{ windows_user }}
-  register: windows_home
+  register: wsl_windows_home
 
 - name: Warn if Windows home directory is not found
-  debug:
+  ansible.builtin.debug:
     msg: "⚠️ Windows home directory not found: /mnt/c/Users/{{ windows_user }}"
-  when: not windows_home.stat.exists
+  when: not wsl_windows_home.stat.exists
 
 - name: Create symlinks for Windows directories
-  file:
+  ansible.builtin.file:
     src: /mnt/c/Users/{{ windows_user }}/{{ item.src }}
     dest: "{{ ansible_env.HOME }}/{{ item.dest }}"
     state: link
   with_items: "{{ user_symlinks }}"
-  when: windows_home.stat.exists and user_symlinks is defined
+  when: wsl_windows_home.stat.exists and user_symlinks is defined
 
 - name: Create symlinks for Windows programs
-  file:
+  ansible.builtin.file:
     src: /mnt/c/Program Files/{{ item.src }}
     dest: "{{ ansible_env.HOME }}/.local/bin/{{ item.dest }}"
     state: link
   with_items: "{{ programs_symlinks }}"
-  when: windows_home.stat.exists and programs_symlinks is defined
+  when: wsl_windows_home.stat.exists and programs_symlinks is defined

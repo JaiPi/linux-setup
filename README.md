@@ -44,3 +44,4 @@ ansible-playbook playbook.yml --ask-become-pass
 | 🏃 **Run normally** | `ansible-playbook playbook.yml --ask-become-pass`       |
 | 🔍 **Dry-run** *(Check mode)* | `ansible-playbook playbook.yml --ask-become-pass --check` |
 | 🔧 **Verbose mode** | `ansible-playbook playbook.yml --ask-become-pass -vvvv` |
+| 🎯 **Run a single role** | `ansible-playbook playbook.yml --ask-become-pass --tags stow` |

@@ -1,6 +1,6 @@
 ---
 - name: Ensure required directories exist
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/{{ item }}"
     state: directory
     mode: 0755
