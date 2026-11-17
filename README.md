@@ -1,6 +1,6 @@
-# Automated Linux Setup with Ansible
+# linux-setup
 
-This Ansible playbook **automates the setup of a Linux environment** by installing essential packages, configuring dotfiles, and setting up Terraform-related tools.
+Gets me up and running on any new Linux machine: **Debian, Fedora and WSL**. This Ansible playbook installs essential packages, applies my dotfiles, and sets up Zsh and Terraform tooling.
 
 ## 🚀 Features
 - **System Package Installation** (`apt` for Debian, `dnf` for Fedora)
