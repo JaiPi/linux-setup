@@ -1,9 +1,10 @@
 ---
-dest_name: stow
+dest_name: repos/jaipi/stow
 version: main
 stow_dirs:
   - aws
-  # - bash
+  - bash
+  - claude
   # - git
   # - ssh
   - tfswitch
