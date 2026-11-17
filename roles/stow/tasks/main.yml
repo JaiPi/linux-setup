@@ -25,6 +25,14 @@
     accept_hostkey: yes
   when: stow_ssh_key.stat.exists and not stow_dir.stat.exists
 
+- name: Ensure ~/.ssh is a real directory, so stow links only files into it
+  # Without it, stow would link the whole ~/.ssh into the public dotfiles repo, and keys
+  # created later would land there.
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.ssh"
+    state: directory
+    mode: "0700"
+
 - name: Run Stow
   ansible.builtin.command:
     cmd: stow -d {{ ansible_env.HOME }}/{{ dest_name }} -t {{ ansible_env.HOME }} {{ item }}
